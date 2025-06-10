@@ -1,8 +1,15 @@
 package ac.cr.ucr.hoVim.model;
 
-public class User {
 
-    private int userId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "tbUser")
+public class User {
+    @Id
+    private int id;
     private String name;
     private String email;
     private String telephone;
@@ -11,20 +18,20 @@ public class User {
     public User() {
     }
 
-    public User(int userId, String name, String email, String telephone, String userType) {
-        this.userId = userId;
+    public User(int id, String name, String email, String telephone, String userType) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.telephone = telephone;
         this.userType = userType;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getId() {
+        return id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
