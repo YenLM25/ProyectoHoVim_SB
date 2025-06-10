@@ -1,55 +1,56 @@
 package ac.cr.ucr.hoVim.service;
 
 import ac.cr.ucr.hoVim.model.Area;
-import ac.cr.ucr.hoVim.repository.AreaRegister;
-import ac.cr.ucr.hoVim.repository.IAreaRegister;
+import ac.cr.ucr.hoVim.repository.AreaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class AreaService implements IAreaRegister {
+public class AreaService {
 
     @Autowired
-    AreaRegister areaRegister;
+    AreaRepository areaRepository;
 
-    @Override
-    public Area addArea(Area area) {
+    public Area saveArea(Area area) {
 
-        return this.areaRegister.addArea(area);
-
-    }
-
-    @Override
-    public List<Area> getAllAreas() {
-
-        return this.areaRegister.getAllAreas();
+        return this.areaRepository.save(area);
 
     }
 
-    @Override
-    public Area getArea(Integer areaId) {
+    public List<Area> findAllAreas() {
 
-        return this.areaRegister.getArea(areaId);
-
-    }
-
-    @Override
-    public Area deleteArea(Integer areaId) {
-
-        return this.areaRegister.deleteArea(areaId);
+        return this.areaRepository.findAll();
 
     }
 
-    @Override
+    public Optional<Area> findAreaById(Integer areaId) {
+
+        return this.areaRepository.findById(areaId);
+
+    }
+
+    public void deleteArea(Integer areaId) {
+
+        this.areaRepository.deleteById(areaId);
+
+    }
+
     public Area editArea(Integer areaId, Area areaEdit) {
-        return this.areaRegister.editArea(areaId, areaEdit);
-    }
 
-    @Override
-    public Boolean existId(Integer areaId) {
-        return this.areaRegister.existId(areaId);
-    }
+        Optional<Area> areaOp= this.areaRepository.findById(areaId);
+
+        if(areaOp.isPresent()) {
+
+            Area area= areaOp.get();
+            area = areaEdit;
+            return this.areaRepository.save(area);
+
+        }
+
+        return null;    }
+
 
 }

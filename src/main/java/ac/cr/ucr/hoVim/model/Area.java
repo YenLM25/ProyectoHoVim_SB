@@ -1,13 +1,21 @@
 package ac.cr.ucr.hoVim.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "tb_area")
 public class Area {
 
+    @Id
     private Integer areaId;
     private String areaName;
     private Integer totalRooms, totalBeds;
     private String weekdayVisitingHours, weekendVisitingHours, visitingRequirements;
 
     public Area() {
+        this.areaId = 0;
     }
 
     public Area(Integer areaId, String areaName, Integer totalRooms, Integer totalBeds, String weekdayVisitingHours, String weekendVisitingHours, String visitingRequirements) {
