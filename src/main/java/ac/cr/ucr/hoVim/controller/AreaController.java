@@ -31,14 +31,14 @@ public class AreaController {
     }
 
     //Si el id esta registardo, muestra un area
-    @GetMapping("/{id}")
+    @GetMapping("/{areaId}")
     public ResponseEntity<?> getArea (@PathVariable Integer areaId) {
 
         Optional<Area> area = this.areaService.findAreaById(areaId);
 
         if (area == null || area.get().getAreaId() == 0) {
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El area con id: " +areaId+ " no fue encontrada" );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The area " +areaId+ " was not found" );
         }
 
         return ResponseEntity.ok(area);
@@ -65,7 +65,7 @@ public class AreaController {
         Optional<Area> areaOp = this.areaService.findAreaById(area.getAreaId());
         if (areaOp.isPresent()) {
 
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario con el id "+area.getAreaId()+" ya se encuentra registrado");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("The area "+area.getAreaId()+" is already registered");
 
         }
 
@@ -75,31 +75,33 @@ public class AreaController {
     }
 
     //Elimina un area si el id esta registrado
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{areaId}")
     public ResponseEntity<?> deleteArea(@PathVariable Integer areaId) {
 
         Optional<Area> areaOp = this.areaService.findAreaById(areaId);
 
         if(!areaOp.isPresent()) {
 
-            return  ResponseEntity.status(HttpStatus.CONFLICT).body("El id "+areaId+ " no fue encuntrado.");
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body("The area "+areaId+ " was not found.");
 
         }
 
         this.areaService.deleteArea(areaId);
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("El area "+areaId+" no se encuentra registrada");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("The area "+areaId+" was successfully deteled");
 
     }
 
-    //Edita el area segun id, solo si esta registrado. No verifica que el id no cambie
-    @PutMapping("/{id}")
+    //Edita el area segun id, solo si esta registrado. Verifica que el id no pueda ser editado
+    @PutMapping("/{areaId}")
     public ResponseEntity<?> editArea(@Validated @PathVariable Integer areaId, @RequestBody Area areaEdit, BindingResult result) {
 
         if(result.hasErrors()) {
 
             Map<String,String> errors = new HashMap<>();
             for(FieldError error: result.getFieldErrors()){
+
                 errors.put(error.getField(),error.getDefaultMessage());
+
             }
 
             return  ResponseEntity.badRequest().body(errors);
@@ -108,7 +110,15 @@ public class AreaController {
         Optional<Area> areaOp = this.areaService.findAreaById(areaId);
 
         if(!areaOp.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("The area with ID: " + areaId + " is not registered.");
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("The area with " + areaId + " ID is not registered.");
+
+        }
+
+        if (!areaId.equals(areaEdit.getAreaId())) {
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("The ID is not the same as requested");
+
         }
 
         return ResponseEntity.ok(this.areaService.editArea(areaId, areaEdit));
