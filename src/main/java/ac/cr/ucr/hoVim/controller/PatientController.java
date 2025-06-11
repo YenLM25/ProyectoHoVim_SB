@@ -31,7 +31,7 @@ public class PatientController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getPatient(@PathVariable Integer id){
         Optional<Patient> patient = this.patientService.findByIDPatient(id);
-        if(patient==null || patient.get().getPatientId()==0){
+        if(!patient.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente con el ID "+id+" no encontrado");
         }
         return ResponseEntity.ok(patient);
@@ -47,8 +47,44 @@ public class PatientController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        Patient patientSave = this.patientService.savePatient(patient);
+        Optional<Patient> patientOp=this.patientService.findByIDPatient(patient.getPatientId());
+
+        if(patientOp.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario con el ID "+patient.getPatientId()+" ya se encuentra registrado.");
+        }
+        Patient patientSave=this.patientService.savePatient(patient);
         return ResponseEntity.status(HttpStatus.CREATED).body(patientSave);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePatient(@PathVariable Integer id){
+        Optional<Patient> patientOp=this.patientService.findByIDPatient(id);
+        if(!patientOp.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario con el ID "+id+" NO se encuentra registrado.");
+        }
+        this.patientService.deletePatient(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editPatient(@Validated @PathVariable Integer id, @RequestBody Patient patientEdit, BindingResult result){
+        if(result.hasErrors()){
+            Map<String, String> errors = new HashMap<>();
+            for(FieldError error : result.getFieldErrors()){
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
+        }
+        Optional<Patient> patientOp = this.patientService.findByIDPatient(id);
+        if(!patientOp.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario con el ID " + id + " NO se encuentra registrado.");
+        }
+        return ResponseEntity.ok(this.patientService.editPatient(id, patientEdit));
+    }
+
+    @GetMapping("/findByName/{name}")
+    public List<Patient> findByName(@PathVariable String name){
+        return this.patientService.findByName(name);
     }
 
 }
