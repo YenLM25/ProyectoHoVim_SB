@@ -1,6 +1,14 @@
 package ac.cr.ucr.hoVim.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name= "tbVisit")
+
 public class Visit {
+    @Id
     private Integer patientId;
     private Integer visitId;
     private String status;
