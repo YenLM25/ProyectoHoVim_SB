@@ -13,37 +13,39 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/area")
+@RequestMapping("/api/hoVim/area")
 public class AreaController {
 
     @Autowired
     AreaService areaService;
 
+    //Muestra todas las areas registradas
     @GetMapping
     public List<Area> getAllAreas() {
 
-        return this.areaService.getAllAreas();
+        return this.areaService.findAllAreas();
 
     }
 
-    //Area por id
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getArea(@PathVariable Integer areaId) {
+    //Si el id esta registardo, muestra un area
+    @GetMapping("/{areaId}")
+    public ResponseEntity<?> getArea (@PathVariable Integer areaId) {
 
-        Area area = this.areaService.getArea(areaId);
+        Optional<Area> area = this.areaService.findAreaById(areaId);
 
-        if (area == null || area.getAreaId() == 0) {
+        if (area == null || area.get().getAreaId() == 0) {
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El area con id: " +areaId+ " no fue encontrada" );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The area " +areaId+ " was not found" );
         }
 
         return ResponseEntity.ok(area);
 
     }
 
-
+    //Guarda un area si no esta registrado el id
     @PostMapping
     public ResponseEntity<?> addArea(@Validated @RequestBody Area area, BindingResult result) {
 
@@ -60,64 +62,67 @@ public class AreaController {
 
         }
 
-        if (this.areaService.existId(area.getAreaId())) {
+        Optional<Area> areaOp = this.areaService.findAreaById(area.getAreaId());
+        if (areaOp.isPresent()) {
 
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("El area con id "+area.getAreaId()+" ya esta registrada");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("The area "+area.getAreaId()+" is already registered");
 
         }
 
-        Area areaAdd = this.areaService.addArea(area);
+        Area areaAdd = this.areaService.saveArea(area);
         return ResponseEntity.status(HttpStatus.CREATED).body(areaAdd);
 
     }
 
-    @DeleteMapping("/{id}")
+    //Elimina un area si el id esta registrado
+    @DeleteMapping("/{areaId}")
     public ResponseEntity<?> deleteArea(@PathVariable Integer areaId) {
 
-        if (this.areaService.existId(areaId)) {
+        Optional<Area> areaOp = this.areaService.findAreaById(areaId);
 
-            this.areaService.deleteArea(areaId);
-            return  ResponseEntity.status(HttpStatus.OK).body("El area con id "+areaId+" fue eliminada correctamente");
+        if(!areaOp.isPresent()) {
+
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body("The area "+areaId+ " was not found.");
 
         }
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("El area "+areaId+" no se encuentra registrada");
+        this.areaService.deleteArea(areaId);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("The area "+areaId+" was successfully deteled");
 
     }
 
-    @PutMapping("/{id}")
+    //Edita el area segun id, solo si esta registrado. Verifica que el id no pueda ser editado
+    @PutMapping("/{areaId}")
     public ResponseEntity<?> editArea(@Validated @PathVariable Integer areaId, @RequestBody Area areaEdit, BindingResult result) {
 
-        if(result.hasErrors()){
+        if(result.hasErrors()) {
 
-            Map<String, String> errors = new HashMap<>();
+            Map<String,String> errors = new HashMap<>();
+            for(FieldError error: result.getFieldErrors()){
 
-            for(FieldError error: result.getFieldErrors()) {
-
-                errors.put(error.getField(), error.getDefaultMessage());
+                errors.put(error.getField(),error.getDefaultMessage());
 
             }
 
-            return ResponseEntity.badRequest().body(errors);
+            return  ResponseEntity.badRequest().body(errors);
+
+        }
+        Optional<Area> areaOp = this.areaService.findAreaById(areaId);
+
+        if(!areaOp.isPresent()){
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("The area with " + areaId + " ID is not registered.");
 
         }
 
-        if(this.areaService.existId(areaId)) {
-            if (areaId != areaEdit.getAreaId()){
+        if (!areaId.equals(areaEdit.getAreaId())) {
 
-                return ResponseEntity.status (HttpStatus.CONFLICT).body("El ID de busqueda no es igual al ID del objeto editado");
-
-            } else {
-
-                return ResponseEntity.ok(this.areaService.editArea(areaId, areaEdit));
-            }
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("The ID is not the same as requested");
 
         }
 
-        return ResponseEntity.status (HttpStatus.CONFLICT).body("El area con el ID "+areaId+" no se encuentra registrada");
-
+        return ResponseEntity.ok(this.areaService.editArea(areaId, areaEdit));
 
     }
-
 
 }
