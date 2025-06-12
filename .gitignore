@@ -33,5 +33,3 @@ build/
 .vscode/
 
 
-# Ignorar configuración local de base de datos
-src/main/resources/application.properties
