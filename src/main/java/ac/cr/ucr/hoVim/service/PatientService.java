@@ -1,11 +1,14 @@
 package ac.cr.ucr.hoVim.service;
+import org.springframework.stereotype.Service;
 
 import ac.cr.ucr.hoVim.model.Patient;
 import ac.cr.ucr.hoVim.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+
+
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class PatientService {
 
     @Autowired
@@ -42,7 +45,7 @@ public class PatientService {
     }
 
     public List<Patient> findByName(String name){
-        return this.patientRepository.findByName(name);
+        return this.patientRepository.findByPatientName(name);
     }
 
 }
