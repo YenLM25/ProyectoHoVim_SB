@@ -33,14 +33,22 @@ public class VisitService {
     }
 
     public Visit editVisit(Integer visitId, Visit visitEdited) {
-        Optional<Visit> visitOp=this.visitRepository.findById(visitId);
-        if (visitOp.isPresent()){
-            Visit visit=visitOp.get();
-            visit=visitEdited;
+        Optional<Visit> visitOp = this.visitRepository.findById(visitId);
+        if (visitOp.isPresent()) {
+            Visit visit = visitOp.get();
+
+            visit.setPatientId(visitEdited.getPatientId());
+            visit.setStatus(visitEdited.getStatus());
+            visit.setDate(visitEdited.getDate());
+
             return this.visitRepository.save(visit);
         }
+
         return null;
     }
+
+
+
 
 
 }//End of class
