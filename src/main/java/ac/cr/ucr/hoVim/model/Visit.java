@@ -1,35 +1,28 @@
 package ac.cr.ucr.hoVim.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name= "tbVisit")
 
 public class Visit {
     @Id
-    private Integer patientId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer visitId;
+
+    private Integer patientId;
     private String status;
     private String date;
 
     public Visit() {
+
     }
 
-    public Visit(Integer patientId, Integer visitId, String status, String date) {
-        this.patientId = patientId;
+    public Visit(Integer visitId, Integer patientId, String status, String date) {
         this.visitId = visitId;
+        this.patientId = patientId;
         this.status = status;
         this.date = date;
-    }
-
-    public Integer getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
     }
 
     public Integer getVisitId() {
@@ -38,6 +31,14 @@ public class Visit {
 
     public void setVisitId(Integer visitId) {
         this.visitId = visitId;
+    }
+
+    public Integer getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Integer patientId) {
+        this.patientId = patientId;
     }
 
     public String getStatus() {
@@ -56,3 +57,4 @@ public class Visit {
         this.date = date;
     }
 }
+

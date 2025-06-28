@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 @RequestMapping("/api/hoViM/visit")
 public class VisitContoller {
@@ -44,11 +45,6 @@ public class VisitContoller {
                 errors.put(error.getField(),error.getDefaultMessage());
             }
             return ResponseEntity.badRequest().body(errors);
-        }
-        //Verificar si el id existe
-        Optional<Visit>visitOp=this.visitService.findByIdVisit(visit.getVisitId());
-        if (visitOp.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("The visit with ID: " + visit.getVisitId() + " is already registered.");
         }
         Visit visitAdd=this.visitService.saveVisit(visit);
         return ResponseEntity.status(HttpStatus.CREATED).body(visitAdd);
