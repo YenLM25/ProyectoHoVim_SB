@@ -40,11 +40,17 @@ public class UserService {
 
 
     public User editUser(Integer id, User userEdited) {
-        Optional<User> userOp= this.userRepository.findById(id);
-        if(userOp.isPresent()){
-            User user= userOp.get();
-            user = userEdited;
-            return this.userRepository.save(user);
+        Optional<User> userOp = this.userRepository.findById(id);
+        if (userOp.isPresent()) {
+            User user = userOp.get();
+
+            // actualizo campo por campo en el objeto ya existente
+            user.setName(userEdited.getName());
+            user.setEmail(userEdited.getEmail());
+            user.setTelephone(userEdited.getTelephone());
+            user.setUserType(userEdited.getUserType());
+
+            return this.userRepository.save(user); // ahora sí aqui Hibernate hace un update y no crea otro usuario
         }
         return null;
     }
