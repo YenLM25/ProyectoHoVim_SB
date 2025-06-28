@@ -44,22 +44,17 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<?> saveUser(@Validated @RequestBody User user, BindingResult result){
-        if(result.hasErrors()){
-            Map<String,String> errors = new HashMap<>();
-            for(FieldError error: result.getFieldErrors()){
-                errors.put(error.getField(),error.getDefaultMessage());
+    public ResponseEntity<?> saveUser(@Validated @RequestBody User user, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : result.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
             }
-            return  ResponseEntity.badRequest().body(errors);
+            return ResponseEntity.badRequest().body(errors);
         }
-        //verifica si el id existe
-        Optional<User> userOp = this.userService.findByIdUser(user.getId());
-        if(userOp.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("The user with the ID: " + user.getId() + " is already registered.");
-        }
+
         User userAdd = this.userService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userAdd);
-
     }
 
 
