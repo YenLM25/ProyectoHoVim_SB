@@ -44,13 +44,20 @@ public class AreaService {
 
         if(areaOp.isPresent()) {
 
-            Area area= areaOp.get();
-            area = areaEdit;
-            return this.areaRepository.save(area);
+            Area area = areaOp.get();
 
+            area.setAreaName(areaEdit.getAreaName());
+            area.setTotalRooms(areaEdit.getTotalRooms());
+            area.setTotalBeds(areaEdit.getTotalBeds());
+            area.setWeekdayVisitingHours(areaEdit.getWeekdayVisitingHours());
+            area.setWeekendVisitingHours(areaEdit.getWeekendVisitingHours());
+            area.setVisitingRequirements(areaEdit.getVisitingRequirements());
+
+            return this.areaRepository.save(area);
         }
 
-        return null;    }
+        return null;
+    }
 
 
 }

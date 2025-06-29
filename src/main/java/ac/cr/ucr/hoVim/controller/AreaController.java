@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 @RequestMapping("/api/hoVim/area")
 public class AreaController {
@@ -36,7 +37,7 @@ public class AreaController {
 
         Optional<Area> area = this.areaService.findAreaById(areaId);
 
-        if (area == null || area.get().getAreaId() == 0) {
+        if (!area.isPresent()) {
 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The area " +areaId+ " was not found" );
         }
@@ -62,13 +63,7 @@ public class AreaController {
 
         }
 
-        Optional<Area> areaOp = this.areaService.findAreaById(area.getAreaId());
-        if (areaOp.isPresent()) {
-
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("The area "+area.getAreaId()+" is already registered");
-
-        }
-
+        area.setAreaId(null);
         Area areaAdd = this.areaService.saveArea(area);
         return ResponseEntity.status(HttpStatus.CREATED).body(areaAdd);
 
