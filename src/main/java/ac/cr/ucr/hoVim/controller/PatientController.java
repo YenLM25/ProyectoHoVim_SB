@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
-@RequestMapping("/api/patient")
+@RequestMapping("/api/hoVim/patient")
 public class PatientController {
 
     @Autowired
@@ -47,13 +47,8 @@ public class PatientController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        Optional<Patient> patientOp=this.patientService.findByIDPatient(patient.getPatientId());
-
-        if(patientOp.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario con el ID "+patient.getPatientId()+" ya se encuentra registrado.");
-        }
-        Patient patientSave=this.patientService.savePatient(patient);
-        return ResponseEntity.status(HttpStatus.CREATED).body(patientSave);
+        Patient patientAdd = this.patientService.savePatient(patient);
+        return ResponseEntity.status(HttpStatus.CREATED).body(patientAdd);
     }
 
     @DeleteMapping("/{id}")

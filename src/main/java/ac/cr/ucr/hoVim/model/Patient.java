@@ -1,15 +1,15 @@
 package ac.cr.ucr.hoVim.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tb_patient")
 public class Patient {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer patientId;
+
     private String patientName;
     private String area;
     private Integer floorNumber;
