@@ -1,13 +1,13 @@
 package ac.cr.ucr.hoVim.service;
-import org.springframework.stereotype.Service;
 
 import ac.cr.ucr.hoVim.model.Patient;
 import ac.cr.ucr.hoVim.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class PatientService {
 
@@ -38,14 +38,21 @@ public class PatientService {
         Optional<Patient> patientOp = this.patientRepository.findById(id);
         if (patientOp.isPresent()) {
             Patient patient = patientOp.get();
-            patient = patientEdit;
+
+            patient.setPatientName(patientEdit.getPatientName());
+            patient.setArea(patientEdit.getArea());
+            patient.setFloorNumber(patientEdit.getFloorNumber());
+            patient.setRooms(patientEdit.getRooms());
+            patient.setBedNumber(patientEdit.getBedNumber());
+
+            //patient = patientEdit;
             return this.patientRepository.save(patient);
         }
         return null;
     }
 
-    public List<Patient> findByName(String name){
-        return this.patientRepository.findByPatientName(name);
+    public List<Patient> findByName(String patientName){
+        return this.patientRepository.findByPatientName(patientName);
     }
 
 }
