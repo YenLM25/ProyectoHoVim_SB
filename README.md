@@ -13,7 +13,7 @@ Aplicación web para la gestión de usuarios, pacientes, áreas, visitas médica
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+##  Tecnologías utilizadas
 
 - **Frontend:** HTML, CSS, Bootstrap, JavaScript (ES6)
 - **Backend:** Java con Spring Boot
@@ -34,7 +34,7 @@ El sistema permite gestionar de forma centralizada:
 
 ---
 
-## 🎨 Estilo visual
+##  Estilo visual
 
 - Paleta institucional basada en azul, rojo acento y fondo neutro.
 - Diseño responsive, limpio y legible.
