@@ -63,4 +63,23 @@ El sistema permite gestionar de forma centralizada:
 - Conversión de fechas entre `yyyy-MM-dd` ↔ `dd/MM/yyyy` en el cliente
 - Pruebas funcionales desde navegador y Postman.
 
+  Uso de Inteligencia Artificial – Proyecto HoVim (Frontend)
+Durante el desarrollo del frontend de HoVim, se utilizó IA como apoyo puntual para lo siguiente:
+•	Diseño visual y CSS:
+o	Sugerencias para estructurar tarjetas, formularios, y estilos limpios y consistentes.
+o	Creación de la imagen usada con la paleta de colores utilizada en el proyecto.
+Prompt: "Una ilustración que represente al personal médico con símbolos de salud. Incluye tres profesionales: dos con batas blancas (uno con estetoscopio y otro con portapapeles) y uno con uniforme de scrubs azul. En el fondo, aparecen íconos relacionados con la medicina: caduceo, corazón con línea de pulso, una pastilla y un frasco de medicamento con cruz. El estilo debe ser colorido, moderno, con tonos vibrantes como rojo, naranja, púrpura y azul. Composición amigable y profesional." (Copilot)
+ Uso de herramientas externas:
+o	Explicación de para qué sirve Bootstrap y cómo aplicar clases como: container, row, col-md-6, etc.
+o	Guía para integrar y utilizar Font Awesome, recomendado uso como librería y ejemplos prácticos para icono
+ JavaScript y conexión API:
+o	Asistencia para escribir métodos fetch (), manipular el DOM, capturar eventos (addEventListener) y trabajar con fechas.
+o	Apoyo para manejar formularios y cargar dinámicamente elementos como listas de selección (<select>).
+ CORS (Cross-Origin Resource Sharing):
+o	Asistencia para conectar el Frontend con el Backend
+o	Explicación de por qué ocurría el error y cómo solucionarlo en el backend con @CrossOrigin.
+También se utilizó páginas como:
+W3Schools, para consulta de sintaxis, ejemplos de HTML, CSS, JavaScript, y estructura de formularios accesibles y componentes responsivos.
+
+
 > Proyecto desarrollado con fines educativos – 2025 
